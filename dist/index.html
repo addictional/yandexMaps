@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,700&amp;subset=cyrillic" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.min.css" integrity="sha256-l85OmPOjvil/SOvVt3HnSSjzF1TUMyT9eV0c2BzEGzU=" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.css" integrity="sha256-aa0xaJgmK/X74WM224KMQeNQC2xYKwlAt08oZqjeF0E=" crossorigin="anonymous">
+    <link rel="stylesheet" href="/report/bi/dashboard/assets/css/style.css">
+    <script
+  src="https://code.jquery.com/jquery-3.4.1.min.js"
+  integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo="
+  crossorigin="anonymous"></script>
+    <script src="https://api-maps.yandex.ru/2.1/?apikey=a8bae300-443e-461d-b98a-855b1fa4b31e&lang=ru_RU" type="text/javascript"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.8.0/Chart.min.js" integrity="sha256-Uv9BNBucvCPipKQ2NS9wYpJmi8DTOEfTA/nH2aoJALw=" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="map-block block">
+        	<p class="report__title">Магазины</p>
+        	<div class="filter zoom-filter">
+        		<span>Магазины в</span>
+        		<ul class="nav-list">
+	                <li class="active"><a href="#" data-coord="[55.76, 37.64]" data-zoom="3">России</a></li>
+	                <li><a href="#" data-coord="[55.76, 37.64]" data-zoom="10">Москве</a></li>
+	            </ul>
+        	</div>
+            <div class="map-container">
+                <div id="map"></div>
+                <div class="map-filter">
+                    <form action="#" class="filters">
+                        <div class="form__row">
+                        	<p class="form__label">Сегмент</p>
+                            <select name="segment" id="segment">
+                                <option value="Some Value" selected>Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                            </select>
+                        </div>
+                        <div class="form__row">
+                        	<p class="form__label">Роли</p>
+                            <select name="roles" id="roles">
+                                <option value="Some Value" selected>Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                                <option value="Some Value">Some Value</option>
+                            </select>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+<script type="text/javascript" src="index_bundle.js"></script></body>
+
+</html>
