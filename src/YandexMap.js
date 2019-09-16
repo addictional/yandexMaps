@@ -5,6 +5,12 @@ export default class YandexMap {
     constructor(){
         this.map = null;
         this.objectManager = null;
+        this.regions = {
+            collection: null,
+            objectManager: null,
+            visibility : true,
+        };
+        this.eventHadler  = null;
         this.data = new FeatureCollection();
     }
 
@@ -15,13 +21,60 @@ export default class YandexMap {
 
     async init()
     {
-        if(await ymaps.ready())
-        {
-            this._initMap();
-            this._initCluster();
-            await this._setRegions();
-            return true
+        await ymaps.ready();
+        this._initMap();
+        this._initCluster();
+        this._setEvents();
+        await this._setRegions();
+        return true
+    }
+
+    
+
+    _setEvents(){
+        this.eventHandler = this.map.events.group();
+
+        const setOpacity = (num)=>{
+            let newArr = this.regions.collection.features.features.map(element=>{
+                let  opacity = parseFloat(element.options.fillOpacity);
+                if(opacity !== num){
+                    element.options.fillOpacity = num.toString();
+                    this.regions.objectManager.objects.setObjectOptions(element.id,element.options);
+                }
+                return element;
+            });
+            this.regions.collection.addCollection(newArr);
         }
+        const setVisibility = (bool)=>{
+            this.regions.objectManager.setFilter((obj)=>{
+                return bool;
+            });
+        }
+        this.eventHandler.add('boundschange',(function(){
+            let zoom = this.map.getZoom();
+            if(zoom > 7){
+                if(this.regions.visibility)
+                {
+                    setVisibility(false);
+                    this.regions.visibility = false;
+                }
+            }else if(zoom === 6 || zoom ===7){
+                setOpacity(0.5);
+                if(!this.regions.visibility)
+                {
+                    setVisibility(true);
+                    this.regions.visibility = true;
+                }
+            }
+            else{
+                setOpacity(1.0);
+                if(!this.regions.visibility)
+                {
+                    setVisibility(true);
+                    this.regions.visibility = true;
+                }
+            }
+        }).bind(this))
     }
 
 
@@ -42,7 +95,7 @@ export default class YandexMap {
 
     _initCluster(){
         let objectManager = new ymaps.ObjectManager({
-            // clusterize: true,
+            clusterize: true,
 
             preset: 'islands#invertedVioletClusterIcons',
 
@@ -103,11 +156,14 @@ export default class YandexMap {
         this.map.setZoom(num);
     }
 
+    
+
 
 
     async _setRegions(){
         let newCollection = new FeatureCollection(),
-            neededRegions = [],
+            objectManager = new ymaps.ObjectManager(),
+            requiredRegions = [],
             _this = this,
             checkRegion= function (event) {
                 let target = event._sourceEvent.originalEvent.objectId,
@@ -130,13 +186,25 @@ export default class YandexMap {
                 if (region.properties.name === el.city) {
                 region.properties.hintContent = el.hint
                 region.id = region.properties.iso3166
-                    neededRegions.push(region);
+                region.options = {
+                    fillOpacity: 1.0,
+                    strokeColor: '#FFF',
+                    fillColor: el.color,
+                    strokeOpacity: 0.5
+                };
+                requiredRegions.push(region);
                 }
             });
         });
-        newCollection.addCollection(neededRegions);
-        this.objectManager.add(newCollection.features);
-        this.objectManager.objects.events.add(['click'], checkRegion)
+        newCollection.addCollection(requiredRegions);
+        objectManager.add(newCollection.features);
+        objectManager.objects.events.add(['click'], checkRegion);
+        this.map.geoObjects.add(objectManager);
+        this.regions = {
+            collection: newCollection,
+            objectManager: objectManager,
+            visibility : true
+        };
     }
 
 }

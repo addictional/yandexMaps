@@ -19,13 +19,7 @@ const Map = new YandexMap();
                         if (document.querySelector('.nav-list .active') !== null) { document.querySelector('.nav-list .active').classList.remove('active') }
             
                         parentListItem.classList.add('active')
-                        if (this.dataset.zoom === '10') {
-                        document.querySelector('.ymaps-2-1-74-areas-pane').style.display =
-                            'none'
-                        } else {
-                        document.querySelector('.ymaps-2-1-74-areas-pane').style.display =
-                            'block'
-                        }
+                        
             
                         Map.setCenter(eval(this.dataset.coord))
                         Map.setZoom(this.dataset.zoom)
@@ -65,5 +59,6 @@ const Map = new YandexMap();
     });
     Map.showMapPointers();
     zoomButtons();
+    console.log(Map);
     
 }(Map));
